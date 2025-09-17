@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Voting</title>
+</head>
+<body>
+  <h2>Online Voting System</h2>
+
+  <p>Select your candidate:</p>
+  <input type="radio" name="candidate" value="Alice"> Alice <br>
+  <input type="radio" name="candidate" value="Bob"> Bob <br>
+  <input type="radio" name="candidate" value="Charlie"> Charlie <br><br>
+
+  <button onclick="vote()">Vote</button>
+
+  <h3 id="message"></h3>
+
+  <h3>Results:</h3>
+  <p id="results">Alice: 0 | Bob: 0 | Charlie: 0</p>
+
+  <script>
+    // store votes
+    let alice = 0, bob = 0, charlie = 0;
+
+    function vote() {
+      let choice = document.querySelector('input[name="candidate"]:checked');
+      
+      if (choice) {
+        if (choice.value === "Alice") alice++;
+        if (choice.value === "Bob") bob++;
+        if (choice.value === "Charlie") charlie++;
+
+        document.getElementById("message").innerText = "You voted for " + choice.value;
+        document.getElementById("results").innerText =
+          "Alice: " + alice + " | Bob: " + bob + " | Charlie: " + charlie;
+      } else {
+        document.getElementById("message").innerText = "Please select a candidate!";
+      }
+    }
+  </script>
+</body>
+</html>
