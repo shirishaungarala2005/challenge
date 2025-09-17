@@ -12,17 +12,26 @@
   <input type="radio" name="candidate" value="Charlie"> Charlie <br><br>
 
   <button onclick="vote()">Vote</button>
+  <button onclick="resetVotes()">Reset</button>
 
   <h3 id="message"></h3>
 
   <h3>Results:</h3>
   <p id="results">Alice: 0 | Bob: 0 | Charlie: 0</p>
 
+  <h3 id="winner"></h3>
+
   <script>
     // store votes
     let alice = 0, bob = 0, charlie = 0;
+    let voted = false;  // track if user already voted
 
     function vote() {
+      if (voted) {
+        document.getElementById("message").innerText = "❌ You have already voted!";
+        return;
+      }
+
       let choice = document.querySelector('input[name="candidate"]:checked');
       
       if (choice) {
@@ -30,12 +39,38 @@
         if (choice.value === "Bob") bob++;
         if (choice.value === "Charlie") charlie++;
 
-        document.getElementById("message").innerText = "You voted for " + choice.value;
-        document.getElementById("results").innerText =
-          "Alice: " + alice + " | Bob: " + bob + " | Charlie: " + charlie;
+        voted = true; // mark as voted
+        document.getElementById("message").innerText = "✅ You voted for " + choice.value;
+        updateResults();
       } else {
-        document.getElementById("message").innerText = "Please select a candidate!";
+        document.getElementById("message").innerText = "⚠️ Please select a candidate!";
       }
+    }
+
+    function updateResults() {
+      document.getElementById("results").innerText =
+        "Alice: " + alice + " | Bob: " + bob + " | Charlie: " + charlie;
+
+      // Find winner
+      let maxVotes = Math.max(alice, bob, charlie);
+      let winnerText = "";
+      if (maxVotes === 0) {
+        winnerText = "No votes yet!";
+      } else {
+        let winners = [];
+        if (alice === maxVotes) winners.push("Alice");
+        if (bob === maxVotes) winners.push("Bob");
+        if (charlie === maxVotes) winners.push("Charlie");
+        winnerText = "🏆 Current Winner: " + winners.join(" & ");
+      }
+      document.getElementById("winner").innerText = winnerText;
+    }
+
+    function resetVotes() {
+      alice = 0; bob = 0; charlie = 0;
+      voted = false;
+      document.getElementById("message").innerText = "Votes have been reset!";
+      updateResults();
     }
   </script>
 </body>
